@@ -1,0 +1,60 @@
+{
+    "tasks": [
+        {
+            "id": 0,
+            "description": "testdeleting",
+            "status": "to-do",
+            "createdAt": "14.02.2026",
+            "updatedAt": ""
+        },
+        {
+            "id": 1,
+            "description": "t2",
+            "status": "to-do",
+            "createdAt": "14.02.2026",
+            "updatedAt": ""
+        },
+        {
+            "id": 2,
+            "description": "t3",
+            "status": "to-do",
+            "createdAt": "14.02.2026",
+            "updatedAt": ""
+        },
+        {
+            "id": 3,
+            "description": "t4",
+            "status": "to-do",
+            "createdAt": "14.02.2026",
+            "updatedAt": ""
+        },
+        {
+            "id": 4,
+            "description": "t6",
+            "status": "done",
+            "createdAt": "14.02.2026",
+            "updatedAt": "14.02.2026"
+        },
+        {
+            "id": 5,
+            "description": "t7",
+            "status": "in-progress",
+            "createdAt": "14.02.2026",
+            "updatedAt": "14.02.2026"
+        },
+        {
+            "id": 6,
+            "description": "Помыть ванную",
+            "status": "to-do",
+            "createdAt": "14.02.2026",
+            "updatedAt": ""
+        },
+        {
+            "id": 7,
+            "description": "test228",
+            "status": "to-do",
+            "createdAt": "14.02.2026",
+            "updatedAt": ""
+        }
+    ]
+}
