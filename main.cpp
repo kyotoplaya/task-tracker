@@ -333,7 +333,7 @@ void deleteAllTasks()
         std::cout << "Are you SURE you want to " << RED << "delete all tasks? " << RESET << "(Y/N) >> ";
         std::cin >> confirm;
     }
-    
+
     std::cout << std::endl;
 
     if (confirm == 'Y')
@@ -342,7 +342,7 @@ void deleteAllTasks()
         {
             std::ifstream in("tasks.json");
             in.close();
-            std::cout << YELLOW << "All tasks was deleted!" << RESET << std::endl ;
+            std::cout << YELLOW << "All tasks was deleted!" << RESET << std::endl;
         }
         else
         {
@@ -354,12 +354,62 @@ void deleteAllTasks()
     {
         std::cout << GREEN << "Clearing the task list has been cancelled." << RESET << std::endl;
     }
-        
+
+    std::cout << std::endl;
+}
+
+void printHelp()
+{
+    std::cout << std::endl;
+    std::cout << GREEN << "╔════════════════════════════════════════════════════════╗" << RESET << std::endl;
+    std::cout << GREEN << "║              TASK TRACKER - COMMANDS                   ║" << RESET << std::endl;
+    std::cout << GREEN << "╚════════════════════════════════════════════════════════╝" << RESET << std::endl;
+    std::cout << std::endl;
+
+    std::cout << YELLOW << "ADD TASK:" << RESET << std::endl;
+    std::cout << "  ./main.exe add \"task description\"" << std::endl;
+    std::cout << "  " << GREEN << "Example:" << RESET << " ./main.exe add \"Buy groceries\"" << std::endl;
+    std::cout << std::endl;
+
+    std::cout << YELLOW << "LIST TASKS:" << RESET << std::endl;
+    std::cout << "  ./main.exe list              " << GREEN << "- show all tasks" << RESET << std::endl;
+    std::cout << "  ./main.exe list todo         " << GREEN << "- show only todo tasks" << RESET << std::endl;
+    std::cout << "  ./main.exe list in-progress  " << GREEN << "- show only in-progress tasks" << RESET << std::endl;
+    std::cout << "  ./main.exe list done         " << GREEN << "- show only completed tasks" << RESET << std::endl;
+    std::cout << std::endl;
+
+    std::cout << YELLOW << "UPDATE TASK:" << RESET << std::endl;
+    std::cout << "  ./main.exe update <id> \"new description\"" << std::endl;
+    std::cout << "  " << GREEN << "Example:" << RESET << " ./main.exe update 0 \"Buy milk and bread\"" << std::endl;
+    std::cout << std::endl;
+
+    std::cout << YELLOW << "CHANGE STATUS:" << RESET << std::endl;
+    std::cout << "  ./main.exe mark-in-progress <id>   " << GREEN << "- mark task as in progress" << RESET << std::endl;
+    std::cout << "  ./main.exe mark-done <id>          " << GREEN << "- mark task as completed" << RESET << std::endl;
+    std::cout << "  " << GREEN << "Example:" << RESET << " ./main.exe mark-done 2" << std::endl;
+    std::cout << std::endl;
+
+    std::cout << YELLOW << "DELETE TASKS:" << RESET << std::endl;
+    std::cout << "  ./main.exe delete <id>            " << GREEN << "- delete specific task" << RESET << std::endl;
+    std::cout << "  ./main.exe deleteAllTasks         " << GREEN << "- " << RED << "DELETE ALL TASKS" << GREEN << " (with confirmation)" << RESET << std::endl;
+    std::cout << std::endl;
+
+    std::cout << YELLOW << "OTHER:" << RESET << std::endl;
+    std::cout << "  ./main.exe help                " << GREEN << "- show this help message" << RESET << std::endl;
+    std::cout << std::endl;
+
+    std::cout << GREEN << "══════════════════════════════════════════════════════════" << RESET << std::endl;
+    std::cout << "Remember to put descriptions with spaces in " << YELLOW << "quotes" << RESET << "!" << std::endl;
     std::cout << std::endl;
 }
 
 int main(int argc, char *argv[])
 {
+    if (argc == 1)
+    {
+        printHelp();
+        return 0;
+    }
 
     if (argc > 1)
     {
@@ -395,9 +445,18 @@ int main(int argc, char *argv[])
 
         else if (std::string(argv[1]) == "mark-in-progress")
         {
-            int id = std::stoi(std::string(argv[2]));
-            if (!mark(id, "in-progress"))
+            int id;
+
+            try
+            {
+                id = std::stoi(std::string(argv[2]));
+                if (!mark(id, "in-progress"))
                 std::cout << "ID incorrect!";
+            }
+            catch (...)
+            {
+                std::cout << "Invalid ID format";
+            }
         }
 
         else if (std::string(argv[1]) == "mark-done")
@@ -418,6 +477,12 @@ int main(int argc, char *argv[])
         {
             deleteAllTasks();
         }
+
+        else
+        {
+            printHelp();
+        }
+
     }
 
     return 0;
