@@ -9,6 +9,11 @@
 #define STATUS_OFFSET 10
 #define DESCRIPTION_OFFSET 15
 
+#define RED "\033[31m"
+#define YELLOW "\033[33m"
+#define GREEN "\033[32m"
+#define RESET "\033[0m"
+
 struct Task
 {
     int id;
@@ -18,11 +23,12 @@ struct Task
     std::string updatedAt;
 };
 
-enum TaskStatus {
-    ALL_TASKS = 0,    // все задачи
-    TODO = 1,         // только to-do
-    IN_PROGRESS = 2,  // только in-progress
-    DONE = 3          // только done
+enum TaskStatus
+{
+    ALL_TASKS = 0,   // все задачи
+    TODO = 1,        // только to-do
+    IN_PROGRESS = 2, // только in-progress
+    DONE = 3         // только done
 };
 
 std::string getDate()
@@ -157,6 +163,7 @@ void listTasks(TaskStatus filter = ALL_TASKS) // 0 - все, 1 - todo, 2 - in-pr
     }
 
     std::cout << std::endl;
+    std::string color;
 
     for (Task task : tasks)
     {
@@ -167,7 +174,15 @@ void listTasks(TaskStatus filter = ALL_TASKS) // 0 - все, 1 - todo, 2 - in-pr
         {
             std::cout << "ID: " << task.id << std::endl;
             std::cout << "Description: " << task.description << std::endl;
-            std::cout << "Status: " << task.status << std::endl;
+
+            if (task.status == "to-do")
+                color = RED;
+            if (task.status == "in-progress")
+                color = YELLOW;
+            if (task.status == "done")
+                color = GREEN;
+
+            std::cout << "Status: " << color << task.status << RESET << std::endl;
             std::cout << "Created at: " << task.createdAt << std::endl;
             std::cout << "Updated At: " << task.updatedAt << std::endl;
             std::cout << std::endl;
@@ -241,7 +256,8 @@ int updateTask(int id, std::string new_description)
 {
     std::vector<Task> tasks = fillTasksVector();
 
-    if (id >= tasks.size() or id < 0) return 0;
+    if (id >= tasks.size() or id < 0)
+        return 0;
 
     for (Task &task : tasks)
     {
@@ -264,7 +280,8 @@ int mark(int id, std::string mark_str)
 {
     std::vector<Task> tasks = fillTasksVector();
 
-    if (id >= tasks.size() or id < 0) return 0;
+    if (id >= tasks.size() or id < 0)
+        return 0;
 
     for (Task &task : tasks)
     {
@@ -287,7 +304,8 @@ int deleteTask(int id)
 {
     std::vector<Task> tasks = fillTasksVector();
 
-    if (id >= tasks.size() or id < 0) return 0;
+    if (id >= tasks.size() or id < 0)
+        return 0;
 
     tasks.erase(tasks.begin() + id);
 
@@ -301,6 +319,43 @@ int deleteTask(int id)
     std::cout << "Task with ID = " << id << " was deleted!";
 
     return 1;
+}
+
+void deleteAllTasks()
+{
+
+    std::cout << std::endl;
+
+    char confirm = 'x';
+
+    while (confirm != 'Y' && confirm != 'N')
+    {
+        std::cout << "Are you SURE you want to " << RED << "delete all tasks? " << RESET << "(Y/N) >> ";
+        std::cin >> confirm;
+    }
+    
+    std::cout << std::endl;
+
+    if (confirm == 'Y')
+    {
+        if (fileExists())
+        {
+            std::ifstream in("tasks.json");
+            in.close();
+            std::cout << YELLOW << "All tasks was deleted!" << RESET << std::endl ;
+        }
+        else
+        {
+            std::cout << GREEN << "The task list was already empty." << RESET << std::endl;
+        }
+    }
+
+    else
+    {
+        std::cout << GREEN << "Clearing the task list has been cancelled." << RESET << std::endl;
+    }
+        
+    std::cout << std::endl;
 }
 
 int main(int argc, char *argv[])
@@ -334,25 +389,34 @@ int main(int argc, char *argv[])
             int id = std::stoi(std::string(argv[2]));
             std::string new_description = std::string(argv[3]);
 
-            if(!updateTask(id, new_description)) std::cout << "ID incorrect!";
+            if (!updateTask(id, new_description))
+                std::cout << "ID incorrect!";
         }
 
         else if (std::string(argv[1]) == "mark-in-progress")
         {
             int id = std::stoi(std::string(argv[2]));
-            if(!mark(id, "in-progress")) std::cout << "ID incorrect!";
+            if (!mark(id, "in-progress"))
+                std::cout << "ID incorrect!";
         }
 
         else if (std::string(argv[1]) == "mark-done")
         {
             int id = std::stoi(std::string(argv[2]));
-            if(!mark(id, "done")) std::cout << "ID incorrect!";
+            if (!mark(id, "done"))
+                std::cout << "ID incorrect!";
         }
 
         else if (std::string(argv[1]) == "delete")
         {
             int id = std::stoi(std::string(argv[2]));
-            if(!deleteTask(id)) std::cout << "ID incorrect!";
+            if (!deleteTask(id))
+                std::cout << "ID incorrect!";
+        }
+
+        else if (std::string(argv[1]) == "deleteAllTasks")
+        {
+            deleteAllTasks();
         }
     }
 
